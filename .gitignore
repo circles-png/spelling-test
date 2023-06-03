@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+words.txt
+filtered_words.txt
+backend/target

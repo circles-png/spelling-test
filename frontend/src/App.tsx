@@ -3,8 +3,8 @@ import { useState } from 'react'
 const App = () => {
   const [ word, setWord ] = useState('hi'),
         [ started, setStarted ] = useState(false),
-    randomizeWord = () => {
-            
+        randomizeWord = () => {
+
         }
   return <>
     <div className='h-full bg-black text-slate-300 select-none flex flex-col gap-4 text-sm text-center'>
