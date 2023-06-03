@@ -1,16 +1,14 @@
 import { useState } from 'react'
 
 const App = () => {
-  const [ word, setWord ] = useState('hi'),
-        [ started, setStarted ] = useState(false),
-        randomizeWord = () => {
-          fetch('backend/api/word')
-            .then(response => {
-              response.text().then(text => {
-                setWord(text)
-              })
-            })
-        }
+  const [ word, setWord ] = useState(''),
+        [ started, setStarted ] = useState(false)
+  fetch('/api/word')
+    .then(response => {
+      response.text().then(text => {
+        setWord(text)
+      })
+    })
   return <>
     <div className='h-full bg-black text-slate-300 select-none flex flex-col gap-4 text-sm text-center'>
       <header className='flex flex-col mt-8 mx-4 grow-0 shrink gap-2'>
@@ -40,7 +38,6 @@ const App = () => {
                   <button
                     className='border-slate-300 border mx-auto py-2 px-4 hover:bg-slate-300 hover:text-black'
                     onClick={() => {
-                      randomizeWord()
                       setStarted(true)
                     }}
                   >
