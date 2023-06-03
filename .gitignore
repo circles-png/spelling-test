@@ -26,3 +26,4 @@ dist-ssr
 words.txt
 filtered_words.txt
 backend/target
+frontend/server/target
