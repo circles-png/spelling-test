@@ -4,7 +4,7 @@
 extern crate rocket;
 
 use reqwest::get;
-use rocket::{Response, http::Header};
+use rocket::http::Header;
 use std::{
     fs::File,
     io::{self, Read, Write},
