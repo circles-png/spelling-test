@@ -3,23 +3,32 @@
 #[macro_use]
 extern crate rocket;
 
+use reqwest::get;
+use rocket::{Response, http::Header};
 use std::{
     fs::File,
     io::{self, Read, Write},
 };
+use rocket::response::Responder;
 
-use reqwest::get;
+#[derive(Responder)]
+struct WordResponder {
+    word: String,
+    header: Header<'static>,
+}
 
 #[get("/api/word")]
-fn random_word() -> String {
+fn random_word() -> WordResponder {
     let mut words = String::new();
-    File::open("filtered_words.txt")
+    File::open("words.txt")
         .unwrap()
         .read_to_string(&mut words)
         .unwrap();
     let words = words.split('\n').collect::<Vec<&str>>();
-    words[(rand::random::<f32>() * words.len() as f32) as usize]
-        .into()
+    WordResponder {
+        word: (words[(rand::random::<f32>() * words.len() as f32) as usize]).into(),
+        header: Header::new("Access-Control-Allow-Origin", "*"),
+    }
 }
 
 #[launch]
@@ -33,12 +42,7 @@ async fn rocket() -> _ {
             );
         }
     }
-    if let Err(error) = filter_words(8) {
-        panic!(
-            "{}",
-            make_purple(&format!("error filtering words: {}", error))
-        );
-    }
+
     rocket::build().mount("/", routes![random_word])
 }
 
