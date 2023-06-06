@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react'
-import Finish from './components/Finish/Finish'
+import Answer from './components/Answer'
+import Finish from './components/Finish'
 import Header from './components/Header'
 import Intro from './components/Intro'
+import Loading from './components/Loading'
 import { Promise } from 'es6-promise'
 
 const App = () => {
@@ -41,39 +43,26 @@ const App = () => {
               ? <Finish words={words} answers={answers} />
               : started
                 ? loading
-                  ? <>
-                      loading word...
-                    </>
-                  : <>
-                    your word is
-                      <div className='text-6xl font-bold text-slate-100'>
-                        {word}
-                      </div>
-                    type the word correctly and press return
-                      <input
-                        type='text'
-                        className='rounded-xl p-4 bg-black border-2 border-slate-500 text-center'
-                        autoFocus
-                        onKeyDown={event => {
-                          if (event.key === 'Enter') {
-                            const input = event.target as HTMLInputElement
-                            setWords(words.concat([word]))
-                            setAnswers(answers.concat([input.value]))
-                            if (words.length >= 5 - 1)
-                              setFinished(true)
+                  ? <Loading />
+                  : <Answer
+                      word={word}
+                      onSubmit={event => {
+                        const input = event.target as HTMLInputElement
+                        setWords(words.concat([word]))
+                        setAnswers(answers.concat([input.value]))
+                        if (words.length >= 5 - 1)
+                          setFinished(true)
 
-                            input.value = ''
-                            setLoading(true)
-                            fetchWord()
-                              .then(() => {
-                                setLoading(false)
-                              }, () => {
-                                setLoading(false)
-                              })
-                          }
-                        }}
-                      />
-                    </>
+                        input.value = ''
+                        setLoading(true)
+                        fetchWord()
+                          .then(() => {
+                            setLoading(false)
+                          }, () => {
+                            setLoading(false)
+                          })
+                      }}
+                    />
                 : <Intro
                     onClick={() => {
                       setStarted(true)
